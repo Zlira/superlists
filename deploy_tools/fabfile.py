@@ -50,6 +50,10 @@ def _update_virtualenv(source_folder):
         run('virtualenv --python=python3 %s' % (virtualenv_folder,))
     run('%s/bin/pip install -r %s/requirements.txt' % (
         virtualenv_folder, source_folder))
+    # Upgrade Django to version 1.7b
+    run('%s/bin/pip3 install \
+        --upgrade https://www.djangoproject.com/download/1.7b1/tarball/' %
+        (virtualenv_folder,))
 
 
 def _update_static_files(source_folder):
@@ -58,6 +62,8 @@ def _update_static_files(source_folder):
 
 
 def _update_database(source_folder):
+    run('cd %s && ../virtualenv/bin/python3 manage.py makemigrations'
+        % (source_folder,))
     run('cd %s && ../virtualenv/bin/python3 manage.py migrate --noinput' % (
         source_folder,
     ))
